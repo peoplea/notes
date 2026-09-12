@@ -1,0 +1,4 @@
+{
+  "buildCommand": "node edgeone_cache_images.mjs",
+  "outputDirectory": "_site"
+}
