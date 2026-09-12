@@ -14,6 +14,23 @@ OUT = Path("_site")
 ASSETS = OUT / "assets"
 
 text = SRC.read_text(encoding="utf-8")
+
+# Correct five source filenames that were 404 on Wikimedia Commons.
+REPLACEMENTS = {
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Elephant%20Trunk%20Hill%20Guilin.jpg?width=1200":
+        "https://commons.wikimedia.org/wiki/Special:Redirect/file/ElephantTrunkHill.jpg?width=1200",
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Longji%20rice%20terraces%20Guangxi.jpg?width=1200":
+        "https://commons.wikimedia.org/wiki/Special:Redirect/file/Longji%20rice%20terraces.jpg?width=1200",
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Li%20River%20China.jpg?width=1200":
+        "https://commons.wikimedia.org/wiki/Special:Redirect/file/Li%20River%20cruise%20from%20Guilin%20to%20Yangshuo.JPG?width=1200",
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Detian%20Waterfall.jpg?width=1200":
+        "https://commons.wikimedia.org/wiki/Special:Redirect/file/Full%20Sight%20for%20Detian%20Waterfalls%20%26%20Ban%20Gioc%20Waterfalls.jpg?width=1200",
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ban%20Gioc%20-%20Detian%20Falls.jpg?width=1200":
+        "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ban%20Gioc%20-%20Detian%20Falls14.jpg?width=1200",
+}
+for old, new in REPLACEMENTS.items():
+    text = text.replace(old, new)
+
 OUT.mkdir(parents=True, exist_ok=True)
 ASSETS.mkdir(parents=True, exist_ok=True)
 
@@ -55,7 +72,6 @@ def fetch_one(item: tuple[int, str]):
         return raw_url, "assets/fallback.svg", f"FAILED {i:02d}: {url} :: {e}"
 
 
-results = []
 with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
     results = list(pool.map(fetch_one, list(enumerate(urls, start=1))))
 
