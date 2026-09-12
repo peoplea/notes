@@ -26,12 +26,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Build self-contained site
+        run: python3 guangxi-family-journey-2026/cache_images.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./guangxi-family-journey-2026
+          path: ./_site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
